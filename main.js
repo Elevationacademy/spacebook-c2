@@ -1,6 +1,3 @@
-// untill INDIVIDUAL PROJECT EXERCISE 3 
-// will do the rest in the weekend
-
 $(document).ready(function () {
     var currId = 0;
     var posts = [];
@@ -14,29 +11,28 @@ $(document).ready(function () {
         posts.push(currPost);
     }
 
-    //rendering posts + removing dynamic posts 
+    //rendering posts
     function renderPosts() {
         $('.posts').empty();
-        var currIndex = 0;
+
         posts.forEach(function (post) {
-            $('.posts').append("<p class='post' data-index='" + currIndex + "' data-id='" + post.id + "'><button type='button' class='remove'>REMOVE</button>" + post.text + "</p>");
-            currIndex++;
+            $('.posts').append("<p class='post' data-id='" + post.id +
+            "'><button type='button' class='remove'>REMOVE</button>" +
+            post.text + "</p>");
+        });
+        // removing dynamic posts binding
+        $('.remove').on('click', removePost);
+    }
+
+    //removing posts
+    function removePost(){
+        var currentItemId = parseInt($(this).parent('.post').attr("data-id"));
+        var index = posts.findIndex(function(post) {
+        return post.id===currentItemId;
         });
 
-        $('.remove').on('click', function () {
-            //solution 1
-            var index = parseInt($(this).parent('.post').attr("data-index"));
-
-            //solution 2
-            /*
-            var currentItemId = parseInt($(this).parent('.post').attr("data-id"));
-              var index = posts.findIndex(function(post) {
-              return post.id===currentItemId;
-            }); 
-             */
-            posts.splice(index, 1);
-            renderPosts();
-        });
+        posts.splice(index, 1);
+        renderPosts();
     }
 
     //adding posts
