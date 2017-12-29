@@ -17,7 +17,7 @@ $(document).ready(function () {
 
         posts.forEach(function (post) {
             $('.posts').append("<p class='post' data-id='" + post.id +
-            "'><button type='button' class='remove'>REMOVE</button>" +
+            "'><button type='button' class='remove'><i class='fa fa-trash-o'></i></button>" +
             post.text + "</p>");
         });
         // removing dynamic posts binding
@@ -38,8 +38,11 @@ $(document).ready(function () {
     //adding posts
     $('.add-post').click(function () {
         var currPost = $('#post-name').val();
-        addPost(currPost);
-        renderPosts();
+        if (currPost !==""){
+            addPost(currPost);
+            renderPosts();
+        }
+        $('#post-name').val('');
     });
 
 });
