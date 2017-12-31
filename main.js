@@ -2,6 +2,7 @@ $(document).ready(function () {
     var currId = 0;
     var posts = [];
 
+    
     //adding posts to the post array
     function addPost(pText) {
         var currPost = {
