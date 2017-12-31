@@ -3,7 +3,7 @@ var posts = [];
 var idNumber = 1;
 debugger
 
-//test - new branch --
+//test - new branch --test 2
 function pushPost(text, number) {
     posts.push({ text: text, number: number })
 }
