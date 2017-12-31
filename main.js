@@ -9,6 +9,7 @@ $(document).ready(function () {
             text: pText,
         }
         posts.push(currPost);
+        
     }
 
     //rendering posts
