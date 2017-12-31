@@ -2,7 +2,7 @@ $(document).ready(function () {
     var currId = 0;
     var posts = [];
 
-    
+
     //adding posts to the post array
     function addPost(pText) {
         var currPost = {
@@ -23,6 +23,7 @@ $(document).ready(function () {
         });
         // removing dynamic posts binding
         $('.remove').on('click', removePost);
+        
     }
 
     //removing posts
