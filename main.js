@@ -32,7 +32,8 @@ var SpacebookApp = function () {
   var createPost = function (text) {
     var post = {
       text: text,
-      id: currentId
+      id: currentId,
+      comments:[]
     }
 
     currentId += 1;
@@ -48,11 +49,21 @@ var SpacebookApp = function () {
 
       var commentsContainer = '<div class="comments-container">' +
       '<input type="text" class="comment-name">' +
-      '<button class="btn btn-primary add-comment">Post Comment</button> </div>';
+      '<button class="btn btn-primary add-comment">Post Comment</button> <ul class="comment-list"></ul> </div>';
 
       $posts.append('<div class="post" data-id=' + post.id + '>'
         + '<a href="#" class="remove">remove</a> ' + '<a href="#" class="show-comments">comments</a> ' + post.text +
-        commentsContainer + '</div>');
+        commentsContainer  + '</div>' );
+
+
+//bind add-comment event to each post
+        $('.add-comment').off();
+        $('.add-comment').on('click', function(){
+          var comment = $(this).closest('.post').find('.comment-name').val();
+          createComment(this, comment);
+          renderComments(this);
+        });
+        
     }
   }
 
@@ -71,19 +82,51 @@ var SpacebookApp = function () {
     $clickedPost.find('.comments-container').toggleClass('show');
   }
 
+  var createComment = function(currentPost,comment){
+    var $clickedPost = $(currentPost).closest('.post');
+    var post = _findPostById($clickedPost.data().id);
+    post.comments.push({text: comment });
+
+  }
+
+  var renderComments = function(currentPost){
+    var $clickedPost = $(currentPost).closest('.post');
+   var $commentList = $clickedPost.find('.comment-list');
+   $commentList.empty();
+    var id = $clickedPost.data().id;
+    var post = _findPostById(id);
+  
+    for(var i=0; i<post.comments.length; i++){
+       $commentList.append('<li class="comment-text">' + post.comments[i].text +
+        '<a href="#" class="remove-comment">   remove</a> ' + '</li>');
+    }
+
+
+    //bind removeComment event to each comment
+    $('.remove-comment').off();
+    $('.remove-comment').on("click",function(){
+      removeComment(this,post);
+    });
+   
+  }
+    
+  
+  var removeComment = function(currentComment, post){
+    var comment = $(currentComment).closest("comment-text").val();
+    post.comments.splice(post.comments.indexOf({text:comment}), 1);
+    $(currentComment).closest('.comment-text').remove();
+  }
+
+
+
   return {
     createPost: createPost,
     renderPosts: renderPosts,
     removePost: removePost,
+    createComment: createComment,
 
-    // TODO: Implement
-    // createComment: createComment,
+    renderComments: renderComments,
 
-    // TODO: Implement
-    // renderComments: renderComments,
-
-    // TODO: Implement
-    // removeComment: removeComment,
     toggleComments: toggleComments
   }
 }
@@ -107,4 +150,7 @@ $('.posts').on('click', '.remove', function () {
 
 $('.posts').on('click','.show-comments', function () {
   app.toggleComments(this);
+  app.renderComments(this);
 });
+
+
