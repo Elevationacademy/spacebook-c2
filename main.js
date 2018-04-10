@@ -57,12 +57,17 @@ var SpacebookApp = function () {
 
 
 //bind add-comment event to each post
-        $('.add-comment').off();
-        $('.add-comment').on('click', function(){
+        $('.comments-container').on('click', '.add-comment', function(){
           var comment = $(this).closest('.post').find('.comment-name').val();
           createComment(this, comment);
           renderComments(this);
         });
+
+
+        $('.comment-list').on("click",'.remove-comment',function(){
+          removeComment(this,post);
+        });
+       
         
     }
   }
@@ -97,16 +102,16 @@ var SpacebookApp = function () {
     var post = _findPostById(id);
   
     for(var i=0; i<post.comments.length; i++){
-       $commentList.append('<li class="comment-text">' + post.comments[i].text +
-        '<a href="#" class="remove-comment">   remove</a> ' + '</li>');
+       $commentList.append('<li class="comment-text">'  + '<a href="#" class="remove-comment">   remove</a> '+ post.comments[i].text +
+         + '</li>');
     }
 
 
     //bind removeComment event to each comment
-    $('.remove-comment').off();
-    $('.remove-comment').on("click",function(){
-      removeComment(this,post);
-    });
+    // $('.remove-comment').off();
+    // $('.remove-comment').on("click",function(){
+    //   removeComment(this,post);
+    // });
    
   }
     
