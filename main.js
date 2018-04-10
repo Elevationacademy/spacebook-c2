@@ -1,3 +1,4 @@
+//this is an added comment to play with git branching
 var SpacebookApp = function () {
   var posts = [
     // {text: "Hello world", id: 0, comments:[
