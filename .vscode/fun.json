@@ -1,0 +1,25 @@
+{
+   "name": "cow",
+   "weight":
+   {
+       "kg": 200,
+       "tons": 0.2
+   },
+   "location":
+    ["dessert", "tropical"],
+    "endangered":"no",
+    "foods":
+    [
+        {"name": "corn",
+        "amount":"20%"
+        },
+        {"name": "barley",
+        "amount":"10%"
+        },
+        {"name": "grass",
+        "amount":"50%"
+        }
+    ],
+    "animal-that-eats":["lions", "cheetah", "bear", "tigar"],
+    "delicious-rating": 4
+}
