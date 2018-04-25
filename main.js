@@ -1,110 +1,136 @@
 var SpacebookApp = function () {
-  var posts = [
-    // {text: "Hello world", id: 0, comments:[
-    //   { text: "Man, this is a comment!"},
-    //   { text: "Man, this is a comment!"},
-    //   { text: "Man, this is a comment!"}
-    // ]},
-    // {text: "Hello world", id: 0, comments:[
-    //   { text: "Man, this is a comment!"},
-    //   { text: "Man, this is a comment!"},
-    //   { text: "Man, this is a comment!"}
-    // ]},
-    // {text: "Hello world", id: 0, comments:[
-    //   { text: "Man, this is a comment!"},
-    //   { text: "Man, this is a comment!"},
-    //   { text: "Man, this is a comment!"}
-    // ]}
-  ];
+    var posts = [];
+    // the current id to assign to a post
+    var currentId = 0;
+    var commentId = 0;
+    var $posts = $('.posts');
 
-  // the current id to assign to a post
-  var currentId = 0;
-  var $posts = $('.posts');
-
-  var _findPostById = function (id) {
-    for (var i = 0; i < posts.length; i += 1) {
-      if (posts[i].id === id) {
-        return posts[i];
-      }
-    }
-  }
-
-  var createPost = function (text) {
-    var post = {
-      text: text,
-      id: currentId
+    var _findPostById = function (postDataId) {
+        for (var i = 0; i < posts.length; i += 1) {
+            if (posts[i].id == postDataId) {
+                return posts[i];
+            }
+        }
     }
 
-    currentId += 1;
+    var createPost = function (text) {
+        var post = {
+            text: text,
+            id: currentId,
+            comments: []
+        }
 
-    posts.push(post);
-  }
-
-  var renderPosts = function () {
-    $posts.empty();
-
-    for (var i = 0; i < posts.length; i += 1) {
-      var post = posts[i];
-
-      var commentsContainer = '<div class="comments-container">' +
-      '<input type="text" class="comment-name">' +
-      '<button class="btn btn-primary add-comment">Post Comment</button> </div>';
-
-      $posts.append('<div class="post" data-id=' + post.id + '>'
-        + '<a href="#" class="remove">remove</a> ' + '<a href="#" class="show-comments">comments</a> ' + post.text +
-        commentsContainer + '</div>');
+        currentId += 1;
+        posts.push(post);
+        console.log(posts);
     }
-  }
 
-  var removePost = function (currentPost) {
-    var $clickedPost = $(currentPost).closest('.post');
-    var id = $clickedPost.data().id;
+    var renderPosts = function () {
+        $posts.empty(); //
 
-    var post = _findPostById(id);
+        for (var i = 0; i < posts.length; i += 1) {
+            var postId = posts[i].id;
+            var postText = posts[i].text;
 
-    posts.splice(posts.indexOf(post), 1);
-    $clickedPost.remove();
-  }
+            var commentsContainer =
+            '<div class="show">' + //'<div class="comments-container">'
+                '<input type="text" class="comment-text">' +
+                '<button class="btn btn-primary add-comment">Comment</button>' +
+            '</div>';
 
-  var toggleComments = function (currentPost) {
-    var $clickedPost = $(currentPost).closest('.post');
-    $clickedPost.find('.comments-container').toggleClass('show');
-  }
+            $posts.append('<div class="post" data-id=' + postId + '>' + postText +
+            '<a href="#" class="show-comments">Comments</a> ' +
+            '<a href="#" class="remove">Remove</a> ' +
+            commentsContainer +
+            '</div>');
+        }
+        //console.log(posts);
+    }
 
-  return {
-    createPost: createPost,
-    renderPosts: renderPosts,
-    removePost: removePost,
+    var removePost = function (postDataId) {
+        var postObj = _findPostById(postDataId);
+        posts.splice(posts.indexOf(postObj), 1);
+        var getPostDiv = '*[data-id = "'+ postDataId + '"]';
+        $(getPostDiv).remove();
+        console.log(posts);
+    }
 
-    // TODO: Implement
-    // createComment: createComment,
+    var toggleComments = function (currentPost) {
+        var $clickedPost = $(currentPost).closest('.post');
+        $clickedPost.find('.comments-container').toggleClass('show');
+    }
 
-    // TODO: Implement
-    // renderComments: renderComments,
+    var createComment = function(text, postDataId) {
+        var comment = {
+            text: text,
+            id: commentId
+        }
+        commentId++;
+        var postObj = _findPostById(postDataId);
+        postObj.comments.push(comment);
+        //console.log(posts);
+    }
+/*
+    var renderComments = function () {
+    }
 
-    // TODO: Implement
-    // removeComment: removeComment,
-    toggleComments: toggleComments
-  }
+    var removeComment = function () {
+    }
+*/
+
+    return {
+        createPost: createPost,
+        renderPosts: renderPosts,
+        removePost: removePost,
+        toggleComments: toggleComments,
+        createComment: createComment,
+/*      // renderComments: renderComments,
+        // removeComment: removeComment,
+*/
+
+    }
 }
+
 
 var app = SpacebookApp();
 
 // immediately invoke the render method
-app.renderPosts();
+//app.renderPosts();
 
-// Events
+
+// Events --------------------
+// Create & Render post
 $('.add-post').on('click', function () {
-  var text = $('#post-name').val();
-  
-  app.createPost(text);
-  app.renderPosts();
+    var $text = $('#input-text').val();
+
+    app.createPost($text);
+    app.renderPosts();
+
+    $('#input-text').val('');
 });
 
+// Remove post
 $('.posts').on('click', '.remove', function () {
-  app.removePost(this);
+    var $postDataId = $(this).closest('div').attr("data-id"); // data().id();
+    app.removePost($postDataId);
+    //$(this).closest('div').remove();
 });
 
+
+// Show comments
 $('.posts').on('click','.show-comments', function () {
-  app.toggleComments(this);
+    app.toggleComments(this);
 });
+
+// Add & Render comment
+$('.posts').on('click', '.add-comment', function () {
+    var $text = $(this).siblings('.comment-text').val(); // problem - returning value of first input
+    var $postDataId = $(this).closest('.post').attr("data-id");
+
+    app.createComment($text, $postDataId);
+    //app.renderComments();
+
+    $('.comment-text').val('');
+});
+
+// Remove comment

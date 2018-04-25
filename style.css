@@ -1,7 +1,26 @@
+body {
+  padding: 50px;
+}
 .comments-container {
   display: none;
 }
-
 .show {
   display: block;
+}
+
+.posts {
+  margin-top: 20px;
+}
+.add-post {
+  margin-top: 10px;
+}
+.post {
+    border: 1px solid black;
+    padding: 5px;
+}
+a.show-comments {
+    margin-left: 10px;
+}
+a.remove {
+    margin-left: 40px;
 }
