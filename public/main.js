@@ -78,8 +78,7 @@ var SpacebookApp = function () {
         // append the comment to the post we wanted to comment on
         $post.find('.comments-list').append(
           '<li class="comment">' + comment.text +
-          '<button class="btn btn-danger btn-sm remove-comment">Remove Comment</button>' +
-          '</li>'
+          '<button class="btn btn-danger btn-sm remove-comment">Remove Comment</button>' + '</li>'
         );
       };
     };

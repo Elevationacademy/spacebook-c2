@@ -103,8 +103,7 @@ var SpacebookApp = function () {
     var post = _findPostById(id);
   
     for(var i=0; i<post.comments.length; i++){
-       $commentList.append('<li class="comment-text">'  + '<a href="#" class="remove-comment">   remove</a> '+ post.comments[i].text +
-         + '</li>');
+       $commentList.append('<li class="comment-text">'  + '<a href="#" class="remove-comment">   remove</a> '+ post.comments[i].text +'</li>');
     }
 
 
