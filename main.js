@@ -1,4 +1,6 @@
 var SpacebookApp = function () {
+  var STORAGE_ID = 'spacebook';
+
   // dummy data
   var posts = [
     {
@@ -23,7 +25,12 @@ var SpacebookApp = function () {
       ]
     }
   ];
-
+  var saveToLocalStorage = function () {
+    localStorage.setItem(STORAGE_ID, JSON.stringify(posts));
+  }
+  var getFromLocalStorage = function () {
+    return JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
+  }
   // render posts to page
   // this function empties the posts div, 
   // then adds each post them from the posts array 
@@ -44,6 +51,7 @@ var SpacebookApp = function () {
         '<a href="#" class="show-comments">Toggle Comments </a> ' +
         post.text + '<button class="btn btn-danger btn-sm remove">Remove Post</button> ' + commentsContainer + '</li>');
     }
+    saveToLocalStorage();
   }
 
   var _renderComments = function () {
@@ -68,9 +76,10 @@ var SpacebookApp = function () {
           '<li class="comment">' + comment.text +
           '<button class="btn btn-danger btn-sm remove-comment">Remove Comment</button>' +
           '</li>'
-        );
+          );
+        };
       };
-    };
+      saveToLocalStorage();
   };
 
   // build a single post object and push it to array
@@ -82,6 +91,7 @@ var SpacebookApp = function () {
 
   var removePost = function ($clickedPost, index) {
     posts.splice(index, 1);
+    saveToLocalStorage();
     $clickedPost.remove();
   };
 
@@ -97,11 +107,13 @@ var SpacebookApp = function () {
   var removeComment = function ($clickedComment, commentIndex, postIndex) {
     // remove the comment from the comments array on the correct post object
     posts[postIndex].comments.splice(commentIndex, 1);
-    // removing the comment from the page
+    saveToLocalStorage();
+     // removing the comment from the page
     $clickedComment.remove();
   };
 
   //  invoke the render method on app load
+  posts=getFromLocalStorage();
   _renderPosts();
   _renderComments();
 
